@@ -1,5 +1,6 @@
 #ifndef HASH_H
 #define HASH_H
+#define ALPHABET_SIZE 255
 typedef struct {
     void **q;
     size_t size;

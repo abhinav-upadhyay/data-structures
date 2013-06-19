@@ -10,9 +10,9 @@ hash(char *str, int size)
     int i;
     int hashcode = 0;
     size_t len = strlen(str);
-    const unsigned int c = (int) pow(255, len);
+    const unsigned int c = (int) pow(ALPHABET_SIZE, len);
     for (i = 0; i < len; i++) {
-        hashcode += (c / pow(255, i + 1)) * str[i];
+        hashcode += (c / pow(ALPHABET_SIZE, i + 1)) * str[i];
     }
     return hashcode % size;
 }
