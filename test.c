@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "hash_table.h"
+#include "hashtable.h"
 
 int
 main(int argc, char **argv)
@@ -9,7 +9,7 @@ main(int argc, char **argv)
     const char *x = "abhinav";
     put(ht, "name", (void *) x);
     printf("%s\n", get(ht, "name"));
-    free(ht);
+    clear(ht);
     return 0;
            
 }

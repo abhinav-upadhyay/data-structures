@@ -2,7 +2,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 #include <string.h>
-# include "hash_table.h"
+# include "hashtable.h"
 
 static int
 hash(char *str, int size)
@@ -45,5 +45,14 @@ get(hashtable *ht, char *key)
 {
     int index = hash(key, 10);
     return ht->q[index];
+}
+
+void
+clear(hashtable *ht)
+{
+    int i;
+    for (i = 0; i < ht->size; i++)
+        free(ht->q[i]);
+    free(ht);
 }
 
