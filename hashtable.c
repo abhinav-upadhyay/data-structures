@@ -23,7 +23,7 @@ init(size_t size)
     hashtable *ht;
     if ((ht = malloc(sizeof(hashtable))) == NULL)
         return NULL;
-    ht->q = calloc(size, sizeof(void *));
+    ht->q = (void **) calloc(size, sizeof(void *));
     if (ht->q == NULL) {
         free(ht);
         return NULL;
@@ -50,9 +50,7 @@ get(hashtable *ht, char *key)
 void
 clear(hashtable *ht)
 {
-    int i;
-    for (i = 0; i < ht->size; i++)
-        free(ht->q[i]);
+    free(ht->q);
     free(ht);
 }
 
