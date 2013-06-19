@@ -40,7 +40,7 @@ put(hashtable *ht, char *key, void *value)
     ht->q[index] = value;
 }
 
-char *
+void *
 get(hashtable *ht, char *key)
 {
     int index = hash(key, 10);

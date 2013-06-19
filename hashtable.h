@@ -7,6 +7,6 @@ typedef struct {
 
 hashtable *init(size_t);
 void put(hashtable *, char *, void *);
-char *get(hashtable *, char *);
+void *get(hashtable *, char *);
 void clear(hashtable *);
 #endif
