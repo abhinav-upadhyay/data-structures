@@ -31,7 +31,7 @@ right(int x)
 static void
 swim(int *h, int index)
 {
-    if (index == 1)
+    if (index <= 1)
         return;
 
     if (h[index] < h[parent(index)]) {
