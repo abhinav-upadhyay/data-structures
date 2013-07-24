@@ -29,14 +29,21 @@
 
 #ifndef HASH_H
 #define HASH_H
-#define ALPHABET_SIZE 255
+#define SH_ALPHABET_SIZE 255
+#define SH_DEFAULT_TABLE_SIZE 30
+#include "list.h"
 typedef struct {
-    void **q;
+    list **buckets;
     size_t size;
 } hashtable;
 
+typedef struct {
+    const char *key;
+    void *value;
+} pair;
+
 hashtable *init(size_t);
-void put(hashtable *, char *, void *);
-void *get(hashtable *, char *);
+int put(hashtable *, const char *, void *);
+void *get(hashtable *, const char *);
 void clear(hashtable *);
 #endif

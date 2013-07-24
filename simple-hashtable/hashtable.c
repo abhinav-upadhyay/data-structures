@@ -30,18 +30,19 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
-#include <string.h>
+# include <string.h>
 # include "hashtable.h"
+# include "list.h"
 
 static int
-hash(char *str, int size)
+hash(const char *str, int size)
 {
     int i;
     int hashcode = 0;
     size_t len = strlen(str);
-    const unsigned int c = (int) pow(ALPHABET_SIZE, len);
+    const unsigned int c = (int) pow(SH_ALPHABET_SIZE, len);
     for (i = 0; i < len; i++) {
-        hashcode += (c / pow(ALPHABET_SIZE, i + 1)) * str[i];
+        hashcode += (c / pow(SH_ALPHABET_SIZE, i + 1)) * str[i];
     }
     return hashcode % size;
 }
@@ -50,36 +51,55 @@ hashtable *
 init(size_t size)
 {
     hashtable *ht;
+    size_t init_size = size == 0? SH_DEFAULT_TABLE_SIZE: size;
+    
     if ((ht = malloc(sizeof(hashtable))) == NULL)
         return NULL;
-    ht->q = (void **) calloc(size, sizeof(void *));
-    if (ht->q == NULL) {
+    ht->buckets = calloc(init_size, sizeof(list *));
+    if (ht->buckets == NULL) {
         free(ht);
         return NULL;
     }
     ht->size = size;
-    memset(ht->q, 0, size);
+    memset(ht->buckets, 0, size);
     return ht;
 }
 
-void
-put(hashtable *ht, char *key, void *value)
+int
+put(hashtable *ht, const char *key, void *value)
 {
-    int index = hash(key, 10);
-    ht->q[index] = value;
+    pair *p = malloc(sizeof(pair));
+    size_t keylen = strlen(key) + 1;
+    p->key = malloc(keylen);
+    memcpy((void *)p->key, (void *)key, keylen);
+    p->value = value;
+    if (p == NULL)
+        return -1;
+    int index = hash(key, ht->size);
+    if (ht->buckets[index] == NULL) {
+        ht->buckets[index] = list_init();
+    }
+    list_add(&ht->buckets[index], p);
+    return 0;
 }
 
 void *
-get(hashtable *ht, char *key)
+get(hashtable *ht, const char *key)
 {
-    int index = hash(key, 10);
-    return ht->q[index];
+    int index = hash(key, ht->size);
+    list *l = ht->buckets[index];
+    while (l) {
+        if (strncmp(((pair *)l->data)->key, key, strlen(key)) == 0)
+            return ((pair *)l->data)->value;
+        l = l->next;
+    }
+    return NULL;
 }
 
 void
 clear(hashtable *ht)
 {
-    free(ht->q);
+    free(ht->buckets);
     free(ht);
 }
 
