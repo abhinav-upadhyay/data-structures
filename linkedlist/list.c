@@ -138,7 +138,6 @@ list_print(list *l, void (*print_callback) (void *p))
     list *l1 = l;
     while(l1 != NULL) {
         print_callback(l1->data);
-        printf("%d\n", *(int *)l1->data);
         l1 = l1->next;
     }
 }
