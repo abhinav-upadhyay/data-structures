@@ -1,5 +1,5 @@
-CFLAGS=-Wall -c -g
-LFLAGS=-lm
+CFLAGS=-Wall -I../linkedlist/ -c -g 
+LFLAGS=-L../linkedlist/ -lm -llist
 all: test
 
 test: test.o hashtable.o
