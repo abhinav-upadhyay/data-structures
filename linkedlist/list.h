@@ -38,4 +38,6 @@ typedef struct list {
 list *list_init(void);
 void list_insert(list **, void *);
 void list_delete(list **, list *);
+list *getlist(int *, size_t);
+void list_print(list *, void (*print_callback) (void *));
 #endif

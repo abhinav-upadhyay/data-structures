@@ -122,7 +122,7 @@ void list_merge(list **h1, list **h2)
 }
 
 
-static list *
+list *
 getlist(int *a, size_t len)
 {
     list *l = list_init();
@@ -132,33 +132,14 @@ getlist(int *a, size_t len)
     return l;
 }
 
-static void
-list_print(list *l)
+void
+list_print(list *l, void (*print_callback) (void *p))
 {
     list *l1 = l;
     while(l1 != NULL) {
+        print_callback(l1->data);
         printf("%d\n", *(int *)l1->data);
         l1 = l1->next;
     }
 }
-
-int
-main(int argc, char **argv)
-{
-    int a1[] = {8, 6, 4};
-    list *l1 = getlist(a1, 3);
-    int a2[] = {12, 10, 5, 3};
-    list *l2 = getlist(a2, 4);
-    printf("l1:\n");
-    list_print(l1);
-    printf("l2:\n");
-    list_print(l2);
-    list_merge(&l1, &l2);
-    printf("merged list:\n");
-    list_print(l1);
-    return 0;
-}
-
-
-
 
