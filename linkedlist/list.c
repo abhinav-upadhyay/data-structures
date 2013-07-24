@@ -38,14 +38,14 @@ typedef struct list {
 
 
 list *
-init(void)
+list_init(void)
 {
     list *l = NULL;
     return l;
 }
 
 void
-insert(list **head, void *data)
+list_add(list **head, void *data)
 {
     list *node = malloc(sizeof(list));
     node->data = data;
@@ -54,7 +54,7 @@ insert(list **head, void *data)
 }
 
 void
-delete(list **head, list *node)
+list_remove(list **head, list *node)
 {
     list *prevnode;
     list *curnode;
@@ -76,7 +76,7 @@ delete(list **head, list *node)
     }
 }
 
-void merge(list **h1, list **h2)
+void list_merge(list **h1, list **h2)
 {
     list *l3 = NULL;
     list *l1 = *h1;
@@ -125,15 +125,15 @@ void merge(list **h1, list **h2)
 static list *
 getlist(int *a, size_t len)
 {
-    list *l = init();
+    list *l = list_init();
     int i;
     for (i = 0; i < len; i++)
-        insert(&l, &a[i]);
+        list_add(&l, &a[i]);
     return l;
 }
 
 static void
-print(list *l)
+list_print(list *l)
 {
     list *l1 = l;
     while(l1 != NULL) {
@@ -150,12 +150,12 @@ main(int argc, char **argv)
     int a2[] = {12, 10, 5, 3};
     list *l2 = getlist(a2, 4);
     printf("l1:\n");
-    print(l1);
+    list_print(l1);
     printf("l2:\n");
-    print(l2);
-    merge(&l1, &l2);
+    list_print(l2);
+    list_merge(&l1, &l2);
     printf("merged list:\n");
-    print(l1);
+    list_print(l1);
     return 0;
 }
 
