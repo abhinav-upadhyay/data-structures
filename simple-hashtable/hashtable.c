@@ -69,12 +69,17 @@ int
 put(hashtable *ht, const char *key, void *value)
 {
     pair *p = malloc(sizeof(pair));
-    size_t keylen = strlen(key) + 1;
-    p->key = malloc(keylen);
-    memcpy((void *)p->key, (void *)key, keylen);
-    p->value = value;
     if (p == NULL)
         return -1;
+
+    size_t keylen = strlen(key) + 1;
+    p->key = malloc(keylen);
+    if (p->key == NULL) {
+        free(p);
+        return -1;
+    }
+    memcpy((void *)p->key, (void *)key, keylen);
+    p->value = value;
     int index = hash(key, ht->size);
     if (ht->buckets[index] == NULL) {
         ht->buckets[index] = list_init();
