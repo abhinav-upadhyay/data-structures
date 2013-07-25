@@ -48,10 +48,10 @@ hash(const char *str, int size)
 }
 
 hashtable *
-init(size_t size)
+init(size_t max_size)
 {
     hashtable *ht;
-    size_t init_size = size <= 0? SH_DEFAULT_TABLE_SIZE: size;
+    size_t init_size = max_size <= 0? SH_DEFAULT_TABLE_SIZE: max_size;
     
     if ((ht = malloc(sizeof(hashtable))) == NULL)
         return NULL;
@@ -60,14 +60,41 @@ init(size_t size)
         free(ht);
         return NULL;
     }
-    ht->size = size;
-    memset(ht->buckets, 0, size);
+    ht->max_size = max_size;
+    ht->size = 0;
+    memset(ht->buckets, 0, init_size);
     return ht;
 }
 
-int
-put(hashtable *ht, const char *key, void *value)
+static void
+resize(hashtable **ht)
 {
+    int i;
+    size_t newsize = (*ht)->max_size * 2;
+
+    hashtable *new_ht = init(newsize);
+    if (new_ht == NULL)
+        return;
+
+    for (i = 0; i < (*ht)->max_size; i++) {
+        list *l = (*ht)->buckets[i];
+        while (l) {
+            /*
+             *TODO What happens if while copying the linked list the new
+             * hashtable goes out of space and resize is called again?
+             */
+            put(&new_ht, ((pair *)l->data)->key, ((pair *)l->data)->value);
+            l = l->next;
+        }
+    }
+    clear(*ht);
+    *ht = new_ht;
+}
+
+int
+put(hashtable **table, const char *key, void *value)
+{
+    hashtable *ht = *table;
     pair *p = malloc(sizeof(pair));
     if (p == NULL)
         return -1;
@@ -80,18 +107,21 @@ put(hashtable *ht, const char *key, void *value)
     }
     memcpy((void *)p->key, (void *)key, keylen);
     p->value = value;
-    int index = hash(key, ht->size);
+    int index = hash(key, ht->max_size);
     if (ht->buckets[index] == NULL) {
         ht->buckets[index] = list_init();
+        ht->size++;
     }
     list_add(&ht->buckets[index], p);
+    if (ht->size == ht->max_size)
+        resize(table);
     return 0;
 }
 
 void *
 get(hashtable *ht, const char *key)
 {
-    int index = hash(key, ht->size);
+    int index = hash(key, ht->max_size);
     list *l = ht->buckets[index];
     while (l) {
         if (strncmp(((pair *)l->data)->key, key, strlen(key)) == 0)

@@ -35,6 +35,7 @@
 typedef struct {
     list **buckets;
     size_t size;
+    size_t max_size;
 } hashtable;
 
 typedef struct {
@@ -43,7 +44,7 @@ typedef struct {
 } pair;
 
 hashtable *init(size_t);
-int put(hashtable *, const char *, void *);
+int put(hashtable **, const char *, void *);
 void *get(hashtable *, const char *);
 void clear(hashtable *);
 #endif
