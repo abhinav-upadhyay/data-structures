@@ -51,7 +51,7 @@ hashtable *
 init(size_t size)
 {
     hashtable *ht;
-    size_t init_size = size == 0? SH_DEFAULT_TABLE_SIZE: size;
+    size_t init_size = size <= 0? SH_DEFAULT_TABLE_SIZE: size;
     
     if ((ht = malloc(sizeof(hashtable))) == NULL)
         return NULL;
