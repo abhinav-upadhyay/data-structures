@@ -16,5 +16,6 @@ main(int argc, char **argv)
     list *l1 = getlist(a1, 3);
     printf("l1:\n");
     list_print(l1, print_callback);
+    list_free(l1, NULL);
     return 0;
 }

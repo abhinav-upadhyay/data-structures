@@ -40,4 +40,5 @@ void list_add(list **, void *);
 void list_remove(list **, list *);
 list *getlist(int *, size_t);
 void list_print(list *, void (*print_callback) (void *));
+void list_free(list *, void (*free) (void *));
 #endif

@@ -142,3 +142,18 @@ list_print(list *l, void (*print_callback) (void *p))
     }
 }
 
+void
+list_free(list *head, void (*free_callback) (void *))
+{
+    list *l = head;
+    list *next;
+    while (l) {
+        next = l->next;
+        if (free_callback)
+            free_callback(l->data);
+        free(l);
+        l = next;
+    }
+}
+
+
