@@ -101,9 +101,20 @@ get(hashtable *ht, const char *key)
     return NULL;
 }
 
+static void
+free_pair(void *d)
+{
+    pair *p = (pair *) d;
+    free((void *)p->key);
+    free(p);
+}
+
 void
 clear(hashtable *ht)
 {
+    int i;
+    for (i = 0; i < ht->size; i++)
+        list_free(ht->buckets[i], free_pair);
     free(ht->buckets);
     free(ht);
 }
